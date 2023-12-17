@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Projectile
   - EnemyPending
+  - EnemyHolder
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - Tower
   - Projectile
   - IgnoreBullet
-  - 
+  - Enemy
   - 
   - 
   - 

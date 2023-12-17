@@ -43,6 +43,16 @@ public class Tower : MonoBehaviour {
         // call fire physics
         targets.ForEach( target => target.OnUpdate( ) );
     }
+
+    private void OnCollisionEnter2D( Collision2D collision ) {
+
+        // destroy enemy if they're in contact with the player
+        // TODO: player health & enemy dmg
+        if ( collision.gameObject.tag == "Enemy" ) {
+
+            Destroy( collision.gameObject.transform.parent.gameObject );
+        }
+    }
 }
 
 public class Targeting {
@@ -61,14 +71,11 @@ public class Targeting {
     }
     public void OnUpdate() {
 
-        // destroy both objects if out of bound
-        if ( Mathf.Abs( bullet.transform.position.x ) > 20 || Mathf.Abs( bullet.transform.position.y ) > 20 ) {
-
-            MonoBehaviour.Destroy( target );
+        // destroy bullet object if out of bound
+        if ( Mathf.Abs( bullet.transform.position.x ) > 10 || Mathf.Abs( bullet.transform.position.y ) > 10 ) 
             MonoBehaviour.Destroy( bullet );
-        }
-
-        // move to the shot direction
+        
+        // move towards the shot direction
         bullet.transform.position = bullet.transform.position + (Vector3)direction;
     }
 }

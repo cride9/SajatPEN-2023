@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using STATS = EnemyStats.STATS;
 
 public class Bullet : MonoBehaviour {
 
@@ -8,10 +9,18 @@ public class Bullet : MonoBehaviour {
 
         // destroy both objects on collision
 
-        // TODO: make health & dmg system and only destroy if enemy health is 0 or below
-        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "EnemyPending" ) {
+        if ( collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "EnemyPending" ) {
 
-            Destroy( collision.gameObject );
+            // get stats for the damage
+            var stats = collision.gameObject.GetComponent<EnemyStats>( );
+
+            // FIXME: passing damage from stats does not work
+            // example: stats.DealDamage( stats.GetStat( STATS.DAMAGE ) ); deals 0 dmg
+            stats.DealDamage( 30 );
+            if ( stats.GetStat( STATS.HEALTH ) <= 0 ) 
+                Destroy( collision.gameObject.transform.parent.gameObject );
+            
+            // always destroy current bullet on contact
             Destroy( this.gameObject );
         }
     }
