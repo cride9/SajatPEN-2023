@@ -20,7 +20,7 @@ public static class Variables {
     public static float flEnemyStatMultiplier = 1f; // base stat multiplier value
 
     // tower vars
-    public static float flFireRate = 0.1f;
+    public static float flFireRate = 0.5f;
     public static float flTowerDamage = 30;
 
     public const float flLineLength = 0.3f; // used for the healthbar size
