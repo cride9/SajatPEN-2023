@@ -10,19 +10,18 @@ public class EnemyStats : MonoBehaviour {
 
     /* Multiplied actual stats */
     private float[ ] Stats = new float[ BaseStats.Length ];
-    private float[ ] MaxStats = new float[ BaseStats.Length ];
-    private float Multiplier = 1f;
+    private float Multiplier = Variables.flEnemyStatMultiplier;
 
     /* Used to set stats */
     public void SetMultiplier( STATS stat, float multiplier ) {
+
         Stats[ ( int )stat ] = BaseStats[ ( int )stat ] * multiplier;
-        MaxStats[ ( int )stat ] = BaseStats[ ( int )stat ] * multiplier;
         Multiplier = multiplier;
     }
+
     public void SetMultiplier( float multiplier ) {
         for ( int i = 0; i < BaseStats.Length; i++ ) {
             Stats[ i ] = BaseStats[ i ] * multiplier;
-            MaxStats[ i ] = BaseStats[ i ] * multiplier;
         }
         Multiplier = multiplier;
     }
@@ -33,11 +32,10 @@ public class EnemyStats : MonoBehaviour {
 
     /* Returns the max stats aka Multiplied original health */
     public float GetOriginalStat( STATS stat ) =>
-        MaxStats[ ( int )stat ];
+        BaseStats[ ( int )stat ] * Multiplier;
 
-    public void DealDamage( float damage ) {
+    public void DealDamage( float damage ) =>
         Stats[ ( int )STATS.HEALTH ] -= damage;
-    }
 
     /* Can be expanded */
     public enum STATS : int {

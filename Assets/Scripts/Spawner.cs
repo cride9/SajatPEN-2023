@@ -16,9 +16,7 @@ public class Spawner : MonoBehaviour {
     private GameObject enemyHolder;
 
     private float flLastSpawnTime = 0f; // used in delaying spawning
-    const float flLineLength = 0.3f; // used for the healthbar size
 
-    public float flSpawnRate = 0.75f; // spawn interval (time between spawning an object)
     void Start( ) {
 
         // get bounds & holder parent
@@ -39,13 +37,9 @@ public class Spawner : MonoBehaviour {
         // SIDENOTE: aligning them to look at the middle point needs to be done every update to make it smooth
         foreach ( var item in enemies ) {
 
-            var statistics = item.GetComponent<EnemyStats>( );
-
             // rotation to look to the middle
             Vector2 direction = item.transform.position - transform.position;
             item.transform.up = direction.normalized * -1;
-
-            UpdateHealth( statistics, item.transform.parent.gameObject.transform.GetChild( 1 ).gameObject );
 
             item.transform.localPosition = new Vector3( item.transform.localPosition.x, item.transform.localPosition.y, 0f );
         }
@@ -67,7 +61,7 @@ public class Spawner : MonoBehaviour {
 
     private void FixedUpdate( ) {
 
-        if ( Time.time - flSpawnRate > flLastSpawnTime ) {
+        if ( Time.time - Variables.flSpawnRate > flLastSpawnTime ) {
 
             // generate a random side to start from
             int SpawnLocation = Random.Range( 0, panelBounds.Count );
@@ -105,24 +99,10 @@ public class Spawner : MonoBehaviour {
 
             // give it some stats
             var stats = spriteChild.AddComponent<EnemyStats>( );
-            stats.SetMultiplier( 1f );
+            stats.SetMultiplier( Variables.flEnemyStatMultiplier );
 
             flLastSpawnTime = Time.time;
         }
-    }
-
-    // this function updates the health (line length)
-    private void UpdateHealth( EnemyStats stats, GameObject child ) {
-
-        // stats - enemy stats
-        // child - the healthbar gameobject
-        var LineRenderer = child.GetComponent<LineRenderer>( );
-
-        // calculate the hp%
-        float hpPercent = stats.GetStat( EnemyStats.STATS.HEALTH ) / stats.GetOriginalStat( EnemyStats.STATS.HEALTH );
-
-        // change the line end position
-        LineRenderer.SetPosition( 1, new Vector3( flLineLength * hpPercent, 0f, 0f ) );
     }
 
     // easier handling

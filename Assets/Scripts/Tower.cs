@@ -6,9 +6,6 @@ using static UnityEditor.Progress;
 
 public class Tower : MonoBehaviour {
 
-    // this determines the fire rate
-    public float flFireRate = 0.1f; 
-
     public GameObject bulletObject;
     private float flShotTime = 0f;
 
@@ -22,7 +19,11 @@ public class Tower : MonoBehaviour {
         foreach ( var item in enemies ) {
 
             // check fire rate
-            if ( flShotTime < Time.time - flFireRate ) {
+            if ( flShotTime <= Time.time - Variables.flFireRate ) {
+
+                var ExistingEnemy = targets.Find( find => find.target == item );
+                if ( ExistingEnemy is not null && ExistingEnemy.Ignore )
+                    continue;
 
                 // add new projectile to the game -> place in the middle -> add projectile tag
                 GameObject newObject = Instantiate( bulletObject );
@@ -30,7 +31,7 @@ public class Tower : MonoBehaviour {
                 newObject.tag = "Projectile";
 
                 // add to targets queue
-                targets.Add( new( item, newObject ) );
+                targets.Add( new( item, newObject, Variables.flTowerDamage ) );
 
                 // save current time for fire rate
                 flShotTime = Time.time;
@@ -59,15 +60,25 @@ public class Targeting {
 
     public GameObject target;
     public GameObject bullet;
+    public float damage;
     public Vector2 direction;
 
-    public Targeting(GameObject tar, GameObject bul) {
+    public bool Ignore = false;
+
+    public Targeting(GameObject tar, GameObject bul, float dam) {
 
         target = tar;
         bullet = bul;
+        damage = dam;
+
+        var targetInfo = target.GetComponent<EnemyStats>( );
+        targetInfo.DealDamage( damage );
 
         // save direction
         direction = Vector2.MoveTowards( bullet.transform.position, target.transform.position, 5f * Time.deltaTime );
+
+        if ( damage >= targetInfo.GetStat( EnemyStats.STATS.HEALTH ) )
+            Ignore = true;
     }
     public void OnUpdate() {
 
