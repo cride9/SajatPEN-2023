@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
 using UnityEngine;
 using static UnityEditor.Progress;
@@ -72,10 +73,15 @@ public class Targeting {
         damage = dam;
 
         var targetInfo = target.GetComponent<EnemyStats>( );
-        targetInfo.DealDamage( damage );
+
+        if ( Random.value <= Variables.flCritChance ) {
+            targetInfo.DealDamage( damage * Variables.flCritDamageMult );
+        }
+        else
+            targetInfo.DealDamage( damage );
 
         // save direction
-        direction = Vector2.MoveTowards( bullet.transform.position, target.transform.position, 5f * Time.deltaTime );
+        direction = Vector2.MoveTowards( bullet.transform.position, target.transform.position, Variables.flBulletSpeed * Time.deltaTime );
 
         if ( damage >= targetInfo.GetStat( EnemyStats.STATS.HEALTH ) )
             Ignore = true;
@@ -85,8 +91,8 @@ public class Targeting {
         // destroy bullet object if out of bound
         if ( Mathf.Abs( bullet.transform.position.x ) > 10 || Mathf.Abs( bullet.transform.position.y ) > 10 ) 
             MonoBehaviour.Destroy( bullet );
-        
+
         // move towards the shot direction
-        bullet.transform.position = bullet.transform.position + (Vector3)direction;
+        bullet.transform.position = bullet.transform.position + ( Vector3 )direction;
     }
 }

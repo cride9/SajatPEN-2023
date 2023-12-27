@@ -2,28 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Variables;
 
 public class EnemyStats : MonoBehaviour {
     
     /* Base stats */
-    readonly static float[ ] BaseStats = { 50f, 1f, 1f };
+    readonly static float[ ] BaseStats = { 50f, 0.8f, 1f };
 
     /* Multiplied actual stats */
     private float[ ] Stats = new float[ BaseStats.Length ];
-    private float Multiplier = Variables.flEnemyStatMultiplier;
+    private float[ ] Multiplier = { flHealthMultiplier, flDamageMultiplier, flSpeedMultiplier };
 
     /* Used to set stats */
     public void SetMultiplier( STATS stat, float multiplier ) {
 
-        Stats[ ( int )stat ] = BaseStats[ ( int )stat ] * multiplier;
-        Multiplier = multiplier;
+        Stats[ ( int )stat ] = BaseStats[ ( int )stat ] + multiplier;
+        Multiplier[ ( int )stat ] = multiplier;
     }
 
     public void SetMultiplier( float multiplier ) {
         for ( int i = 0; i < BaseStats.Length; i++ ) {
-            Stats[ i ] = BaseStats[ i ] * multiplier;
+            Stats[ i ] = BaseStats[ i ] + multiplier;
+            Multiplier[ i ] = multiplier;
         }
-        Multiplier = multiplier;
     }
 
     /* Used to get stats */
@@ -32,7 +33,7 @@ public class EnemyStats : MonoBehaviour {
 
     /* Returns the max stats aka Multiplied original health */
     public float GetOriginalStat( STATS stat ) =>
-        BaseStats[ ( int )stat ] * Multiplier;
+        BaseStats[ ( int )stat ] + Multiplier[ ( int )stat ];
 
     public void DealDamage( float damage ) =>
         Stats[ ( int )STATS.HEALTH ] -= damage;

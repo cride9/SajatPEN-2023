@@ -5,17 +5,23 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
+using static Variables;
+using TMPro;
 
 public class Spawner : MonoBehaviour {
 
     // Added inside editor
     public List<GameObject> gameObjects = new List<GameObject>();
+    public GameObject WaveTextObject;
 
     // Dynamically added, determined by device size
     private List<GameObject> panelBounds = new List<GameObject>();
     private GameObject enemyHolder;
+    private TextMeshProUGUI waveText;
 
     private float flLastSpawnTime = 0f; // used in delaying spawning
+    private int DesiredEnemyCount = iEnemyCount;
+    private float flTimeoutTime = -1f;
 
     void Start( ) {
 
@@ -23,6 +29,10 @@ public class Spawner : MonoBehaviour {
         enemyHolder = GameObject.Find( "EnemyHolder" );
         //panelBounds.AddRange( GameObject.FindGameObjectsWithTag("Bounds") );
         panelBounds.AddRange( new List<GameObject>( ) { GameObject.Find( "BotBound" ), GameObject.Find( "TopBound" ), GameObject.Find( "RightBound" ), GameObject.Find( "LeftBound" ) } );
+        waveText = WaveTextObject.GetComponent<TextMeshProUGUI>();
+
+        GameObject.Find( "TempCoin" ).GetComponent<TextMeshProUGUI>( ).text = $"{iTempCoin}";
+        GameObject.Find( "PermaCoin" ).GetComponent<TextMeshProUGUI>( ).text = $"{iPermaCoin}";
     }
 
 
@@ -61,7 +71,30 @@ public class Spawner : MonoBehaviour {
 
     private void FixedUpdate( ) {
 
-        if ( Time.time - Variables.flSpawnRate > flLastSpawnTime ) {
+        // if wave is completed prepare the next one
+        if ( DesiredEnemyCount == 0 ) {
+
+            // wait for every enemy to be deleted
+            if ( enemyHolder.transform.childCount != 0 )
+                return;
+
+            // set timeout time
+            flTimeoutTime = Time.time;
+            iWaveCount++;
+            DesiredEnemyCount = Mathf.RoundToInt( iEnemyCount * ( flSpawnMultiplier * iWaveCount ) );
+        }
+
+        // timeout for the wave text
+        if ( Time.time - 2f < flTimeoutTime ) {
+
+            waveText.gameObject.SetActive( true );
+            waveText.text = $"Wave {iWaveCount}";
+            return;
+        }
+        waveText.text = $""; // clear text
+        waveText.gameObject.SetActive( false );
+
+        if ( Time.time - flSpawnRate - (flSpawnrateMultiplier * iWaveCount) > flLastSpawnTime ) {
 
             // generate a random side to start from
             int SpawnLocation = Random.Range( 0, panelBounds.Count );
@@ -99,9 +132,12 @@ public class Spawner : MonoBehaviour {
 
             // give it some stats
             var stats = spriteChild.AddComponent<EnemyStats>( );
-            stats.SetMultiplier( Variables.flEnemyStatMultiplier );
+            stats.SetMultiplier( EnemyStats.STATS.DAMAGE, flDamageMultiplier * iWaveCount );
+            stats.SetMultiplier( EnemyStats.STATS.HEALTH, flHealthMultiplier * iWaveCount );
+            stats.SetMultiplier( EnemyStats.STATS.SPEED, flSpeedMultiplier * iWaveCount );
 
             flLastSpawnTime = Time.time;
+            DesiredEnemyCount--;
         }
     }
 
