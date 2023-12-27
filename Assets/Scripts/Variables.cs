@@ -2,17 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Debug : MonoBehaviour {
-
-    void Start( ) {
-
-    }
-
-    void Update( ) {
-
-    }
-}
-
 public static class Variables {
 
     // spawner & enemy vars
@@ -22,7 +11,8 @@ public static class Variables {
     // tower vars
     public static float flFireRate = 0.5f;
     public static float flTowerDamage = 30;
+    public static float flCritChance = 0f;
+    public static float flCritDamageMult = 2f;
 
-    public const float flLineLength = 0.3f; // used for the healthbar size
-
+    public static readonly float flLineLength = 0.3f; // used for the healthbar size
 }
