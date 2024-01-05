@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class UpgradeInGame : MonoBehaviour {
+public class PermanentUpgrades : MonoBehaviour {
 
     // these bools should be asigned inside editor
     public bool Firerate = false;
@@ -21,13 +22,13 @@ public class UpgradeInGame : MonoBehaviour {
     float UpgradePriceBalance = 0f;
     TextMeshProUGUI currentValueText = null;
     TextMeshProUGUI upgradeText = null;
-    TextMeshProUGUI tempCoins = null;
+    TextMeshProUGUI permCoins = null;
 
     void Start( ) {
         // text child
         currentValueText = gameObject.transform.GetChild( 1 ).gameObject.GetComponent<TextMeshProUGUI>( );
         upgradeText = gameObject.transform.GetChild( 2 ).gameObject.GetComponent<TextMeshProUGUI>( );
-        tempCoins = GameObject.Find( "TempCoin" ).GetComponent<TextMeshProUGUI>( );
+        permCoins = GameObject.Find( "PermCoinMenu" ).GetComponent<TextMeshProUGUI>( );
 
         // easiest way to update every text to the current upgrade
         Upgrade( true );
@@ -35,77 +36,78 @@ public class UpgradeInGame : MonoBehaviour {
 
     public void Upgrade( bool setDefaults = false ) {
 
-        if ( UpgradePrice > Variables.iTempCoin && !setDefaults )
+        if ( UpgradePrice > Variables.iPermaCoin && !setDefaults )
             return;
 
         if ( !setDefaults ) {
 
-            Variables.iTempCoin -= UpgradePrice;
-            UpgradePriceBalance = Mathf.Min(0.9f, UpgradePriceBalance + 0.15f );
-            Variables.UpdateTempCoins( tempCoins );
+            Variables.iPermaCoin -= UpgradePrice;
+            UpgradePriceBalance = Mathf.Min( 0.9f, UpgradePriceBalance + 0.15f );
+            Variables.UpdatePermaCoins( permCoins );
         }
+        Variables.SaveVariables( );
         float priceChange = 2f - UpgradePriceBalance;
         switch ( true ) {
 
             case var _ when Firerate:
 
                 if ( !setDefaults ) {
-                    Variables.flFireRate = Mathf.Max( 0.15f, Variables.flFireRate + UpgradeAmount );
+                    Variables.flBaseFireRate = Mathf.Max( 0.15f, Variables.flBaseFireRate + UpgradeAmount );
                     UpgradePrice = Mathf.RoundToInt( ( float )UpgradePrice * priceChange );
                 }
-                currentValueText.text = $"{Math.Round( 1f / Variables.flFireRate, 2 )}/s";
+                currentValueText.text = $"{Math.Round( 1f / Variables.flBaseFireRate, 2 )}/s";
                 upgradeText.text = $"{UpgradePrice}";
                 break;
 
             case var _ when Damage:
                 if ( !setDefaults ) {
-                    Variables.flTowerDamage = Mathf.Min( 370f, Variables.flTowerDamage + UpgradeAmount );
+                    Variables.flBaseTowerDamage = Mathf.Min( 370f, Variables.flBaseTowerDamage + UpgradeAmount );
                     UpgradePrice = Mathf.RoundToInt( ( float )UpgradePrice * priceChange );
                 }
-                currentValueText.text = $"{Variables.flTowerDamage}";
+                currentValueText.text = $"{Variables.flBaseTowerDamage}";
                 upgradeText.text = $"{UpgradePrice}";
 
                 break;
 
             case var _ when CritChance:
                 if ( !setDefaults ) {
-                    Variables.flCritChance = Mathf.Min( 0.35f, Variables.flCritChance + UpgradeAmount );
+                    Variables.flBaseCritChance = Mathf.Min( 0.35f, Variables.flBaseCritChance + UpgradeAmount );
                     UpgradePrice = Mathf.RoundToInt( ( float )UpgradePrice * priceChange );
                 }
-                currentValueText.text = $"{Math.Round(Variables.flCritChance * 100, 2)}%";
+                currentValueText.text = $"{Math.Round( Variables.flBaseCritChance * 100, 2 )}%";
                 upgradeText.text = $"{UpgradePrice}";
 
                 break;
 
             case var _ when CritDamageMult:
                 if ( !setDefaults ) {
-                    Variables.flCritDamageMult = Mathf.Min( 5f, Variables.flCritDamageMult + UpgradeAmount );
+                    Variables.flBaseCritDamageMult = Mathf.Min( 5f, Variables.flBaseCritDamageMult + UpgradeAmount );
                     UpgradePrice = Mathf.RoundToInt( ( float )UpgradePrice * priceChange );
                 }
-                currentValueText.text = $"{Math.Round(Variables.flCritDamageMult * 100, 2)}%";
+                currentValueText.text = $"{Math.Round( Variables.flBaseCritDamageMult * 100, 2 )}%";
                 upgradeText.text = $"{UpgradePrice}";
 
                 break;
 
             case var _ when BulletSpeed:
                 if ( !setDefaults ) {
-                    Variables.flBulletSpeed = Mathf.Min( 14.5f, Variables.flBulletSpeed + UpgradeAmount );
+                    Variables.flBaseBulletSpeed = Mathf.Min( 14.5f, Variables.flBaseBulletSpeed + UpgradeAmount );
                     UpgradePrice = Mathf.RoundToInt( ( float )UpgradePrice * priceChange );
                 }
-                currentValueText.text = $"{Math.Round( Variables.flBulletSpeed, 2 )}";
+                currentValueText.text = $"{Math.Round( Variables.flBaseBulletSpeed, 2 )}";
                 upgradeText.text = $"{UpgradePrice}";
 
                 break;
 
             case var _ when Radius:
                 if ( !setDefaults ) {
-                    Variables.flRadius = Mathf.Min( 200f, Variables.flRadius + UpgradeAmount );
+                    Variables.flBaseRadius = Mathf.Min( 200f, Variables.flBaseRadius + UpgradeAmount );
                     UpgradePrice = Mathf.RoundToInt( ( float )UpgradePrice * priceChange );
                 }
-                currentValueText.text = $"{Variables.flRadius}%";
+                currentValueText.text = $"{Variables.flBaseRadius}%";
                 upgradeText.text = $"{UpgradePrice}";
 
-                GameObject.Find( "Radius" ).transform.localScale = new Vector3( Variables.flRadius, Variables.flRadius, Variables.flRadius );
+                GameObject.Find( "Radius" ).transform.localScale = new Vector3( Variables.flBaseRadius, Variables.flBaseRadius, Variables.flBaseRadius );
                 break;
         }
     }

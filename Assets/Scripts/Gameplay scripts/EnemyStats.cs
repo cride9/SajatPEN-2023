@@ -7,7 +7,7 @@ using static Variables;
 public class EnemyStats : MonoBehaviour {
     
     /* Base stats */
-    readonly static float[ ] BaseStats = { 50f, 0.8f, 1f };
+    readonly static float[ ] BaseStats = { 25f, 0.8f, 0.75f }; // health, damage, speed
 
     /* Multiplied actual stats */
     private float[ ] Stats = new float[ BaseStats.Length ];
@@ -16,7 +16,7 @@ public class EnemyStats : MonoBehaviour {
     /* Used to set stats */
     public void SetMultiplier( STATS stat, float multiplier ) {
 
-        Stats[ ( int )stat ] = BaseStats[ ( int )stat ] + multiplier;
+        Stats[ ( int )stat ] = BaseStats[ ( int )stat ] + (BaseStats[ ( int )stat ] * multiplier);
         Multiplier[ ( int )stat ] = multiplier;
     }
 
@@ -33,7 +33,7 @@ public class EnemyStats : MonoBehaviour {
 
     /* Returns the max stats aka Multiplied original health */
     public float GetOriginalStat( STATS stat ) =>
-        BaseStats[ ( int )stat ] + Multiplier[ ( int )stat ];
+        BaseStats[ ( int )stat ] + ( BaseStats[ ( int )stat ] * Multiplier[ ( int )stat ]);
 
     public void DealDamage( float damage ) =>
         Stats[ ( int )STATS.HEALTH ] -= damage;

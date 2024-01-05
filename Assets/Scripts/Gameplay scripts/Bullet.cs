@@ -36,8 +36,7 @@ public class Bullet : MonoBehaviour {
                 if ( Random.value < 0.6f )
                     iPermaCoin += 1 * iWaveCount;
 
-                tempCoins.text = FormatCurrency(iTempCoin);
-                permaCoins.text = FormatCurrency(iPermaCoin);
+                UpdateCoins( tempCoins, permaCoins );
             }
 
             // always destroy current bullet on contact
@@ -59,15 +58,4 @@ public class Bullet : MonoBehaviour {
         // change the line end position
         LineRenderer.SetPosition( 1, new Vector3( Variables.flLineLength * hpPercent, 0f, 0f ) );
     }
-
-    private string FormatCurrency(int currency) {
-
-        if ( currency > 1000000 )
-            return $"{System.Math.Round( currency / 1000000f, 2 )}M";
-
-        if ( currency > 1000 )
-            return $"{System.Math.Round( currency / 1000f, 2 )}K";
-
-        return currency.ToString();
-    } 
 }

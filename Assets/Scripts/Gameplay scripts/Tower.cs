@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
 using UnityEngine;
-using static UnityEditor.Progress;
+using UnityEngine.SceneManagement;
 
 public class Tower : MonoBehaviour {
 
@@ -53,6 +53,9 @@ public class Tower : MonoBehaviour {
         if ( collision.gameObject.tag == "Enemy" ) {
 
             Destroy( collision.gameObject.transform.parent.gameObject );
+            //SceneManager.LoadScene( "GameMenu", LoadSceneMode.Additive );
+            SceneManager.LoadScene( "Gameplay" );
+            Variables.bPause = true;
         }
     }
 }
