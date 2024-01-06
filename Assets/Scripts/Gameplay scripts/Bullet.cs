@@ -4,12 +4,16 @@ using UnityEngine;
 using STATS = EnemyStats.STATS;
 using static Variables;
 using TMPro;
+using UnityEngine.Audio;
 
 public class Bullet : MonoBehaviour {
 
     public Tower tower = null;
+    public AudioClip[] audioClip;
+    private AudioSource source;
     private TextMeshProUGUI tempCoins = null;
     private TextMeshProUGUI permaCoins = null;
+
 
     private void Start( ) {
 
@@ -17,6 +21,9 @@ public class Bullet : MonoBehaviour {
         tower = GameObject.Find( "Tower" ).GetComponent<Tower>();
         tempCoins = GameObject.Find("TempCoin").GetComponent<TextMeshProUGUI>();
         permaCoins = GameObject.Find("PermaCoin").GetComponent <TextMeshProUGUI>();
+        source = GetComponent<AudioSource>();
+        AudioClip audio = audioClip[Random.Range(0, audioClip.Length)];
+        source.PlayOneShot(audio);
     }
 
     private void OnCollisionEnter2D( Collision2D collision ) {
@@ -26,7 +33,7 @@ public class Bullet : MonoBehaviour {
         if ( collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "EnemyPending" ) {
 
             // get stats for the damage
-            var stats = collision.gameObject.GetComponent<EnemyStats>( );
+            EnemyStats stats = collision.gameObject.GetComponent<EnemyStats>( );
 
             UpdateHealth( stats, collision.transform.parent.GetChild( 1 ).gameObject );
             if ( stats.GetStat( STATS.HEALTH ) <= 0 ) {

@@ -16,13 +16,13 @@ public class Tower : MonoBehaviour {
     void Update( ) {
 
         // get all enemies inside radius
-        var enemies = GameObject.FindGameObjectsWithTag( "Enemy" );
-        foreach ( var item in enemies ) {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag( "Enemy" );
+        foreach ( GameObject item in enemies ) {
 
             // check fire rate
             if ( flShotTime <= Time.time - Variables.flFireRate ) {
 
-                var ExistingEnemy = targets.Find( find => find.target == item );
+                Targeting ExistingEnemy = targets.Find( find => find.target == item );
                 if ( ExistingEnemy is not null && ExistingEnemy.Ignore )
                     continue;
 
@@ -75,7 +75,7 @@ public class Targeting {
         bullet = bul;
         damage = dam;
 
-        var targetInfo = target.GetComponent<EnemyStats>( );
+        EnemyStats targetInfo = target.GetComponent<EnemyStats>( );
 
         if ( Random.value <= Variables.flCritChance ) {
             targetInfo.DealDamage( damage * Variables.flCritDamageMult );
@@ -85,6 +85,7 @@ public class Targeting {
 
         // save direction
         direction = Vector2.MoveTowards( bullet.transform.position, target.transform.position, Variables.flBulletSpeed * Time.deltaTime );
+        
 
         if ( damage >= targetInfo.GetStat( EnemyStats.STATS.HEALTH ) )
             Ignore = true;
