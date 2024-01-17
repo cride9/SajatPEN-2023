@@ -22,15 +22,59 @@ public class UpgradeInGame : MonoBehaviour {
     TextMeshProUGUI currentValueText = null;
     TextMeshProUGUI upgradeText = null;
     TextMeshProUGUI tempCoins = null;
+    TextMeshProUGUI balanceChangeText = null;
+
+    Vector3 defaultBalanceChangePosition;
+    bool isBalanceFloating = false;
+    Color32 showColor = new Color32(255, 0, 0, 255);
+    Color32 hiddenColor = new Color32(255, 0, 0, 0);
 
     void Start( ) {
         // text child
+        balanceChangeText = GameObject.Find("BalanceChangeText").GetComponent<TextMeshProUGUI>();
+        defaultBalanceChangePosition = balanceChangeText.transform.localPosition;
+        balanceChangeText.faceColor = hiddenColor;
+
+
         currentValueText = gameObject.transform.GetChild( 1 ).gameObject.GetComponent<TextMeshProUGUI>( );
         upgradeText = gameObject.transform.GetChild( 2 ).gameObject.GetComponent<TextMeshProUGUI>( );
         tempCoins = GameObject.Find( "TempCoin" ).GetComponent<TextMeshProUGUI>( );
 
+
         // easiest way to update every text to the current upgrade
         Upgrade( true );
+    }
+
+    public void BalanceChangeAnimation(float amount)
+    {
+        balanceChangeText.faceColor = showColor; // Show the text by adding max opacity back
+        balanceChangeText.text = $"-{amount}";
+        isBalanceFloating = true;
+    }
+
+
+
+    void Update()
+    {
+        if (balanceChangeText != null )
+        {
+
+
+            if (isBalanceFloating)
+            { 
+                Vector3 pos = balanceChangeText.transform.localPosition;
+                balanceChangeText.transform.localPosition = new Vector3(pos.x, pos.y + 2);
+                float diff = balanceChangeText.transform.localPosition.y - defaultBalanceChangePosition.y;
+
+                if (diff > 200.0)
+                {
+                    balanceChangeText.faceColor = hiddenColor;
+                    balanceChangeText.transform.localPosition = defaultBalanceChangePosition;
+                    isBalanceFloating = false;
+                }
+            }
+
+        }
     }
 
     public void Upgrade( bool setDefaults = false ) {
@@ -43,6 +87,7 @@ public class UpgradeInGame : MonoBehaviour {
             Variables.iTempCoin -= UpgradePrice;
             UpgradePriceBalance = Mathf.Min(0.9f, UpgradePriceBalance + 0.15f );
             Variables.UpdateTempCoins( tempCoins );
+            BalanceChangeAnimation(UpgradePrice);
         }
         float priceChange = 2f - UpgradePriceBalance;
         switch ( true ) {
