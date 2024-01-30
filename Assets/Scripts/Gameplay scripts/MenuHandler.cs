@@ -15,7 +15,7 @@ public class MenuHandler : MonoBehaviour {
     private Vector3 vecPosition;
     private float LerpAmount = 0f;
 
-    public void OpenClose( ) => Open = !Open;
+    public void OpenClose() => Open = !Open;
 
     (float start, float end) bounds;
     void Start( ) {

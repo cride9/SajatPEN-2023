@@ -14,7 +14,12 @@ public class MainHandle : MonoBehaviour {
         Variables.LoadVariables( );
         Variables.UpdatePermaCoins( GameObject.Find( "PermCoinMenu" ).GetComponent<TextMeshProUGUI>( ) );
         upgradeMenu = GameObject.Find( "UpgradeMenu" );
-        upgradeMenu.SetActive( false );
+        try
+        {
+            upgradeMenu.SetActive(false);
+        }
+        catch (System.Exception)
+        {}
     }
 
     public void StartGame( ) {

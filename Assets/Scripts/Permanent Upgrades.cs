@@ -107,7 +107,12 @@ public class PermanentUpgrades : MonoBehaviour {
                 currentValueText.text = $"{Variables.flBaseRadius}%";
                 upgradeText.text = $"{UpgradePrice}";
 
-                GameObject.Find( "Radius" ).transform.localScale = new Vector3( Variables.flBaseRadius, Variables.flBaseRadius, Variables.flBaseRadius );
+                try
+                {
+                    GameObject.Find("Radius").transform.localScale = new Vector3(Variables.flBaseRadius, Variables.flBaseRadius, Variables.flBaseRadius);
+                }
+                catch (Exception)
+                {}
                 break;
         }
     }

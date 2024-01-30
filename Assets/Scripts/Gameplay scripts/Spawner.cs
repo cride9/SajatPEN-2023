@@ -45,6 +45,8 @@ public class Spawner : MonoBehaviour {
         upgradeHolder = GameObject.Find( "Upgrades" );
 
         SceneManager.LoadScene( "GameMenu", LoadSceneMode.Additive );
+        SceneManager.LoadScene("Options", LoadSceneMode.Additive);
+
     }
 
 
