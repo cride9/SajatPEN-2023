@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuHandler : MonoBehaviour {
 
@@ -18,6 +19,18 @@ public class MenuHandler : MonoBehaviour {
     public void OpenClose() => Open = !Open;
 
     (float start, float end) bounds;
+
+
+    public void OpenInfo()
+    {
+        SceneManager.LoadScene("Info", LoadSceneMode.Additive);
+    }
+
+    public void BackToMain()
+    {
+        SceneManager.UnloadSceneAsync("Info");
+    }
+
     void Start( ) {
 
         if (UpgradePanel != null)

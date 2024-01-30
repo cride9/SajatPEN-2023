@@ -32,7 +32,7 @@ public class Spawner : MonoBehaviour {
     void Start( ) {
 
         // get bounds & holder parent
-        enemyHolder = GameObject.Find( "EnemyHolder" );
+        enemyHolder = GameObject.Find("EnemyHolder");
         //panelBounds.AddRange( GameObject.FindGameObjectsWithTag("Bounds") );
         panelBounds.AddRange( new List<GameObject>( ) { GameObject.Find( "BotBound" ), GameObject.Find( "TopBound" ), GameObject.Find( "RightBound" ), GameObject.Find( "LeftBound" ) } );
         waveText = WaveTextObject.GetComponent<TextMeshProUGUI>();
@@ -44,7 +44,7 @@ public class Spawner : MonoBehaviour {
             );
         upgradeHolder = GameObject.Find( "Upgrades" );
 
-        SceneManager.LoadScene( "GameMenu", LoadSceneMode.Additive );
+        SceneManager.LoadScene("GameMenu", LoadSceneMode.Additive);
         SceneManager.LoadScene("Options", LoadSceneMode.Additive);
 
     }

@@ -167,7 +167,9 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      PermaUpgrade_0: 9219778882382422432
+      PermaUpgrade_1: 4648281651762769405
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
