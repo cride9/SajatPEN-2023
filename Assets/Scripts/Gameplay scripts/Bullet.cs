@@ -10,7 +10,7 @@ public class Bullet : MonoBehaviour {
 
     public Tower tower = null;
     public AudioClip[] audioClip;
-    private AudioSource source;
+    public AudioSource source;
     private TextMeshProUGUI tempCoins = null;
     private TextMeshProUGUI permaCoins = null;
 
