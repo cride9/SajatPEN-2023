@@ -10,6 +10,8 @@ TagManager:
   - EnemyPending
   - EnemyHolder
   - crit
+  - ProjectileReference
+  - Cam
   layers:
   - Default
   - TransparentFX
