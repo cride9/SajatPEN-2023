@@ -9,6 +9,7 @@ TagManager:
   - Projectile
   - EnemyPending
   - EnemyHolder
+  - crit
   layers:
   - Default
   - TransparentFX

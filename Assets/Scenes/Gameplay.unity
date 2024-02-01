@@ -2639,7 +2639,7 @@ GameObject:
   - component: {fileID: 569657459}
   m_Layer: 5
   m_Name: Crit
-  m_TagString: Untagged
+  m_TagString: crit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2676,14 +2676,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.003921569, g: 0.003921569, b: 0.003921569, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -53506877100141143, guid: 421667a8c71974a4d86da6bfc375c497, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2855,6 +2855,14 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 35fa5782c8e8f7747b08874623ddf794, type: 3}
   - {fileID: 8300000, guid: 445ba190012c607438850c4ddd4d936e, type: 3}
   source: {fileID: 0}
+  crit: {fileID: 0}
+  critHidden:
+    serializedVersion: 2
+    rgba: 65793
+  critShown:
+    serializedVersion: 2
+    rgba: 4278256127
+  critFramesShowTime: 100
 --- !u!50 &648897485
 Rigidbody2D:
   serializedVersion: 4

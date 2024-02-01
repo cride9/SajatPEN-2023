@@ -23,7 +23,7 @@ public class AudioController : MonoBehaviour
     }
     void Update()
     {
-        audioSource.volume = slider.value;
+        //audioSource.volume = slider.value;
     }
 
     public void AudioButton()

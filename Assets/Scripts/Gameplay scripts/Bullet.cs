@@ -5,6 +5,8 @@ using STATS = EnemyStats.STATS;
 using static Variables;
 using TMPro;
 using UnityEngine.Audio;
+using static UnityEngine.GraphicsBuffer;
+using UnityEngine.UI;
 
 public class Bullet : MonoBehaviour {
 
@@ -15,7 +17,24 @@ public class Bullet : MonoBehaviour {
     private TextMeshProUGUI permaCoins = null;
 
 
+    public GameObject crit;
+    public Color32 critHidden = new Color32(1, 1, 1, 0);
+    public Color32 critShown = new Color32(255, 1, 1, 255);
+    public int critFramesShowTime = 100;
+
+
+    public void Update()
+    {
+        critFramesShowTime++;
+        if (critFramesShowTime > 15 && GetCritColor().Equals(critShown))
+        {
+            HideCrit();
+        }   
+    }
+
     private void Start( ) {
+
+        crit = GameObject.FindGameObjectWithTag("crit");
 
         // get tower object
         tower = GameObject.Find( "Tower" ).GetComponent<Tower>();
@@ -31,7 +50,16 @@ public class Bullet : MonoBehaviour {
         // destroy both objects on collision
 
         if ( collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "EnemyPending" ) {
+            
+            if (gameObject.name.Equals("Crit"))
+            {
+                print("crit");
+                Vector3 targetPos = gameObject.transform.position;
+                crit.transform.position = new Vector3(targetPos.x, targetPos.y, targetPos.z);
+                ShowCrit();
+                critFramesShowTime = 0;
 
+            }
             // get stats for the damage
             EnemyStats stats = collision.gameObject.GetComponent<EnemyStats>( );
 
@@ -46,11 +74,31 @@ public class Bullet : MonoBehaviour {
                 UpdateCoins( tempCoins, permaCoins );
             }
 
+
+
             // always destroy current bullet on contact
-            Destroy( this.gameObject );
+           
+            Destroy(gameObject);
         }
     }
+    public Color32 GetCritColor()
+    {
+        return crit.GetComponent<Image>().color;
+    }
 
+    public void SetCritColor(Color32 critColor)
+    {
+        crit.GetComponent<Image>().color = critColor;
+    }
+
+    public void ShowCrit()
+    {
+        SetCritColor(critShown);
+    }
+    public void HideCrit()
+    {
+        SetCritColor(critHidden);
+    }
 
     // this function updates the health (line length)
     private void UpdateHealth( EnemyStats stats, GameObject child ) {

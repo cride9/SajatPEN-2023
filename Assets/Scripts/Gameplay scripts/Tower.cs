@@ -66,12 +66,6 @@ public class Targeting {
 
     public GameObject target;
     public GameObject bullet;
-    public RectTransform crit;
-
-    public Color32 critHidden = new Color32(1, 1, 1, 0);
-    public Color32 critShown = new Color32(255, 1, 1, 255);
-    public int critFramesShowTime = 100;
-    public bool isCrit = false;
 
     public float damage;
     public Vector2 direction;
@@ -83,25 +77,20 @@ public class Targeting {
         target = tar;
         bullet = bul;
         damage = dam;
-        if (isCrit)
-        {
-            Vector3 targetPos = target.transform.position;
-            crit.position = new Vector3(targetPos.x, targetPos.y, targetPos.z);
-            ShowCrit();
-            critFramesShowTime = 0;
-            isCrit = false;
-        }
-        crit = GameObject.Find("Crit").GetComponent<RectTransform>();
 
         EnemyStats targetInfo = target.GetComponent<EnemyStats>( );
 
         if ( Random.value <= Variables.flCritChance + 50 ) {
+            target.name = "Crit";
             targetInfo.DealDamage( damage * Variables.flCritDamageMult );
-            isCrit = true;
-            tar.name = "asd";
+
         }
         else
-            targetInfo.DealDamage( damage );
+        {
+            targetInfo.DealDamage(damage);
+        }
+
+      
 
         // save direction
         direction = Vector2.MoveTowards( bullet.transform.position, target.transform.position, Variables.flBulletSpeed * Time.deltaTime );
@@ -112,12 +101,6 @@ public class Targeting {
     }
     public void OnUpdate() {
 
-        critFramesShowTime++;
-        if(critFramesShowTime > 15 && GetCritColor().Equals(critShown))
-        {
-            HideCrit();
-        }
-
         // destroy bullet object if out of bound
         if ( Mathf.Abs( bullet.transform.position.x ) > 10 || Mathf.Abs( bullet.transform.position.y ) > 10 )
         {      
@@ -126,25 +109,6 @@ public class Targeting {
             
         // move towards the shot direction
         bullet.transform.position = bullet.transform.position + ( Vector3 )direction;
-    }
-
-    public Color32 GetCritColor()
-    {
-        return crit.GetComponent<Image>().color;
-    }
-
-    public void SetCritColor(Color32 critColor)
-    {
-        crit.GetComponent<Image>().color = critColor;
-    }
-
-    public void ShowCrit()
-    {
-        SetCritColor(critShown);
-    }
-    public void HideCrit()
-    {
-        SetCritColor(critHidden);
     }
 
 }
