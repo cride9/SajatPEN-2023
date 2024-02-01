@@ -24,14 +24,12 @@ public class UpgradeInGame : MonoBehaviour {
 
     Vector3 defaultBalanceChangePosition;
     bool isBalanceFloating = false;
-    Color32 showColor = new Color32(255, 0, 0, 255);
-    Color32 hiddenColor = new Color32(255, 0, 0, 0);
 
     void Start( ) {
         // text child
         balanceChangeText = GameObject.Find("BalanceChangeText").GetComponent<TextMeshProUGUI>();
         defaultBalanceChangePosition = balanceChangeText.transform.localPosition;
-        balanceChangeText.faceColor = hiddenColor;
+        balanceChangeText.alpha = 0;
 
 
         currentValueText = gameObject.transform.GetChild( 1 ).gameObject.GetComponent<TextMeshProUGUI>( );
@@ -45,7 +43,7 @@ public class UpgradeInGame : MonoBehaviour {
 
     public void BalanceChangeAnimation(float amount)
     {
-        balanceChangeText.faceColor = showColor; // Show the text by adding max opacity back
+        balanceChangeText.alpha = 255; // Show the text by adding max opacity back
         balanceChangeText.text = $"-{amount}";
         isBalanceFloating = true;
     }
@@ -66,7 +64,7 @@ public class UpgradeInGame : MonoBehaviour {
 
                 if (diff > 200.0)
                 {
-                    balanceChangeText.faceColor = hiddenColor;
+                    balanceChangeText.alpha = 0;
                     balanceChangeText.transform.localPosition = defaultBalanceChangePosition;
                     isBalanceFloating = false;
                 }
