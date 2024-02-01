@@ -80,7 +80,7 @@ public class Targeting {
 
         EnemyStats targetInfo = target.GetComponent<EnemyStats>( );
 
-        if ( Random.value <= Variables.flCritChance + 50 ) {
+        if ( Random.value <= Variables.flCritChance) {
             target.name = "Crit";
             targetInfo.DealDamage( damage * Variables.flCritDamageMult );
 
