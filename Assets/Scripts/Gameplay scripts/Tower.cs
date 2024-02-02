@@ -56,7 +56,7 @@ public class Tower : MonoBehaviour {
 
             Destroy( collision.gameObject.transform.parent.gameObject );
             //SceneManager.LoadScene( "GameMenu", LoadSceneMode.Additive );
-            SceneManager.LoadScene( "Gameplay" );
+            SceneManager.LoadScene( "GameOver" );
             Variables.bPause = true;
         }
     }
@@ -90,11 +90,8 @@ public class Targeting {
             targetInfo.DealDamage(damage);
         }
 
-      
-
         // save direction
         direction = Vector2.MoveTowards( bullet.transform.position, target.transform.position, Variables.flBulletSpeed * Time.deltaTime );
-        
 
         if ( damage >= targetInfo.GetStat( EnemyStats.STATS.HEALTH ) )
             Ignore = true;

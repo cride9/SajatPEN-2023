@@ -21,14 +21,13 @@ public class MenuHandler : MonoBehaviour {
     (float start, float end) bounds;
 
 
-    public void OpenInfo()
-    {
-        SceneManager.LoadScene("Info", LoadSceneMode.Additive);
-    }
+    public void OpenInfo() =>
+        SceneManager.LoadSceneAsync("Info");
 
     public void BackToMain()
     {
         SceneManager.UnloadSceneAsync("Info");
+        SceneManager.LoadSceneAsync("Gameplay");
     }
 
     void Start( ) {

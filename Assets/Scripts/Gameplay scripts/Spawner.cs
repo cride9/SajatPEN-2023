@@ -15,12 +15,14 @@ public class Spawner : MonoBehaviour {
     // Added inside editor
     public List<GameObject> gameObjects = new List<GameObject>();
     public GameObject WaveTextObject;
+    public GameObject WaveCountTextObject;
 
     // Dynamically added, determined by device size
     private List<GameObject> panelBounds = new List<GameObject>();
     private GameObject enemyHolder;
     private GameObject upgradeHolder;
     private TextMeshProUGUI waveText;
+    private TextMeshProUGUI waveCountText;
 
     private float flLastSpawnTime = 0f; // used in delaying spawning
     private int DesiredEnemyCount = iEnemyCount;
@@ -36,6 +38,7 @@ public class Spawner : MonoBehaviour {
         //panelBounds.AddRange( GameObject.FindGameObjectsWithTag("Bounds") );
         panelBounds.AddRange( new List<GameObject>( ) { GameObject.Find( "BotBound" ), GameObject.Find( "TopBound" ), GameObject.Find( "RightBound" ), GameObject.Find( "LeftBound" ) } );
         waveText = WaveTextObject.GetComponent<TextMeshProUGUI>();
+        waveCountText = WaveCountTextObject.GetComponent<TextMeshProUGUI>();
         tempCoins = GameObject.Find( "TempCoin" );
         permaCoins = GameObject.Find( "PermaCoin" );
         UpdateCoins(
@@ -46,9 +49,13 @@ public class Spawner : MonoBehaviour {
 
         SceneManager.LoadScene("GameMenu", LoadSceneMode.Additive);
         SceneManager.LoadScene("Options", LoadSceneMode.Additive);
-
+        flSpawnRate = 1.2f;
     }
 
+    public void GameOverMode()
+    {
+        DesiredEnemyCount = int.MaxValue;
+    }
 
     void Update( ) {
 
@@ -96,6 +103,7 @@ public class Spawner : MonoBehaviour {
         if ( bPause )
             return;
 
+        waveCountText.text = $"Wave {iWaveCount}";
         // if wave is completed prepare the next one
         if ( DesiredEnemyCount < 1 ) {
 

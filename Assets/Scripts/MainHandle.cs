@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class MainHandle : MonoBehaviour {
 
     public GameObject upgradeMenu;
+    public GameObject exitButton;
+
     void Start( ) {
 
         Application.targetFrameRate = 144;
@@ -14,19 +16,16 @@ public class MainHandle : MonoBehaviour {
         Variables.LoadVariables( );
         Variables.UpdatePermaCoins( GameObject.Find( "PermCoinMenu" ).GetComponent<TextMeshProUGUI>( ) );
         upgradeMenu = GameObject.Find( "UpgradeMenu" );
-        try
-        {
-            upgradeMenu.SetActive(false);
-        }
-        catch (System.Exception)
-        {}
+        exitButton = GameObject.Find( "Giveup" );
+        upgradeMenu.SetActive( true );
+        exitButton.SetActive( false );
     }
 
     public void StartGame( ) {
 
         Variables.UpdateTempValues( );
         Variables.bPause = false;
-        upgradeMenu.SetActive( true );
         SceneManager.UnloadSceneAsync( "GameMenu", UnloadSceneOptions.UnloadAllEmbeddedSceneObjects );
+        exitButton.SetActive( true );
     }
 }
