@@ -12,6 +12,7 @@ TagManager:
   - crit
   - ProjectileReference
   - Cam
+  - upgrademenu
   layers:
   - Default
   - TransparentFX
